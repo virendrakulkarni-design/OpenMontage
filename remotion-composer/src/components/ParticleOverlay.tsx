@@ -1,3 +1,4 @@
+import React from "react";
 import {
   AbsoluteFill,
   interpolate,
@@ -19,7 +20,11 @@ export type ParticleType =
   | "petals"
   | "sparkles"
   | "mist"
-  | "light-rays";
+  | "light-rays"
+  | "embers"
+  | "snow"
+  | "rain"
+  | "confetti";
 
 interface ParticleOverlayProps {
   type: ParticleType;
@@ -323,6 +328,270 @@ const LightRays: React.FC<{
 };
 
 // ---------------------------------------------------------------------------
+// NEW: Embers — glowing particles rising upward with flickering
+// ---------------------------------------------------------------------------
+
+const Embers: React.FC<{
+  count: number;
+  color: string;
+  intensity: number;
+}> = ({ count, color, intensity }) => {
+  const frame = useCurrentFrame();
+  const { fps, durationInFrames } = useVideoConfig();
+
+  const globalFadeIn = interpolate(frame, [0, fps * 0.5], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+
+  return (
+    <AbsoluteFill style={{ pointerEvents: "none", overflow: "hidden" }}>
+      {Array.from({ length: count }, (_, i) => {
+        const baseX = seededRandom(i * 7 + 1) * 100;
+        const speed = 0.5 + seededRandom(i * 3 + 5) * 1.0;
+        const phase = seededRandom(i * 11 + 3) * Math.PI * 2;
+        const size = 2 + seededRandom(i * 17 + 4) * 5;
+        const delay = seededRandom(i * 19 + 6) * durationInFrames * 0.4;
+
+        const elapsed = Math.max(0, frame - delay);
+        const t = (elapsed / fps) * speed;
+
+        // Rise upward with gentle horizontal sway
+        const x = baseX + Math.sin(t * 2 + phase) * 15;
+        const y = 105 - t * 28; // Rise from bottom
+        const flickerPulse = 0.4 + Math.sin(t * 8 + phase) * 0.3 + 0.3;
+
+        // Fade in and lifetime fade
+        const fadeIn = interpolate(
+          frame,
+          [delay, delay + fps * 0.3],
+          [0, 1],
+          { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+        );
+        const lifetimeFade = y < 0 ? 0 : interpolate(y, [0, 40, 105], [0, 1, 1], {
+          extrapolateLeft: "clamp",
+          extrapolateRight: "clamp",
+        });
+
+        if (y < -5 || y > 110) return null;
+
+        // Color gradation: bright core → dimmer edge
+        const emberColor = i % 3 === 0 ? "#FF6B2B" : i % 3 === 1 ? "#FF9F43" : color;
+
+        return (
+          <div
+            key={i}
+            style={{
+              position: "absolute",
+              left: `${x}%`,
+              top: `${y}%`,
+              width: size,
+              height: size,
+              borderRadius: "50%",
+              backgroundColor: emberColor,
+              opacity: flickerPulse * fadeIn * lifetimeFade * intensity * globalFadeIn,
+              boxShadow: `0 0 ${size * 4}px ${size * 2}px ${emberColor}88, 0 0 ${size * 1.5}px ${emberColor}`,
+            }}
+          />
+        );
+      })}
+    </AbsoluteFill>
+  );
+};
+
+// ---------------------------------------------------------------------------
+// NEW: Snow — white flakes drifting down with gentle rotation
+// ---------------------------------------------------------------------------
+
+const Snow: React.FC<{
+  count: number;
+  color: string;
+  intensity: number;
+}> = ({ count, color, intensity }) => {
+  const frame = useCurrentFrame();
+  const { fps, durationInFrames } = useVideoConfig();
+
+  const globalFadeIn = interpolate(frame, [0, fps * 0.6], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+
+  return (
+    <AbsoluteFill style={{ pointerEvents: "none", overflow: "hidden" }}>
+      {Array.from({ length: count }, (_, i) => {
+        const baseX = seededRandom(i * 7 + 1) * 110 - 5;
+        const speed = 0.15 + seededRandom(i * 3 + 5) * 0.3;
+        const phase = seededRandom(i * 11 + 3) * Math.PI * 2;
+        const size = 3 + seededRandom(i * 17 + 4) * 6;
+        const delay = seededRandom(i * 19 + 6) * durationInFrames * 0.5;
+
+        const elapsed = Math.max(0, frame - delay);
+        const t = (elapsed / fps) * speed;
+
+        // Gentle drift with horizontal sway
+        const x = baseX + Math.sin(t * 0.8 + phase) * 20;
+        const y = -5 + t * 22;
+        const rotation = t * 30 + phase * 57.3;
+
+        const fadeIn = interpolate(
+          frame,
+          [delay, delay + fps * 0.3],
+          [0, 1],
+          { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+        );
+
+        if (y > 110) return null;
+
+        return (
+          <div
+            key={i}
+            style={{
+              position: "absolute",
+              left: `${x}%`,
+              top: `${y}%`,
+              width: size,
+              height: size,
+              borderRadius: "50%",
+              backgroundColor: color || "#FFFFFF",
+              opacity: fadeIn * intensity * globalFadeIn * 0.7,
+              transform: `rotate(${rotation}deg)`,
+              boxShadow: `0 0 ${size * 2}px ${color || "#FFFFFF"}44`,
+            }}
+          />
+        );
+      })}
+    </AbsoluteFill>
+  );
+};
+
+// ---------------------------------------------------------------------------
+// NEW: Rain — angled streaks falling rapidly
+// ---------------------------------------------------------------------------
+
+const Rain: React.FC<{
+  count: number;
+  color: string;
+  intensity: number;
+}> = ({ count, color, intensity }) => {
+  const frame = useCurrentFrame();
+  const { fps, durationInFrames } = useVideoConfig();
+
+  const globalFadeIn = interpolate(frame, [0, fps * 0.3], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+
+  return (
+    <AbsoluteFill style={{ pointerEvents: "none", overflow: "hidden" }}>
+      <svg style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}>
+        {Array.from({ length: count }, (_, i) => {
+          const baseX = seededRandom(i * 7 + 1) * 120 - 10;
+          const speed = 2.0 + seededRandom(i * 3 + 5) * 2.0;
+          const length = 20 + seededRandom(i * 17 + 4) * 30;
+          const angle = 12; // Slight wind angle
+
+          const t = (frame / fps) * speed;
+          const y = ((seededRandom(i * 19 + 6) * 100 + t * 80) % 130) - 15;
+          const x = baseX - (y * Math.tan((angle * Math.PI) / 180));
+
+          const xPx = (x / 100) * 1080;
+          const yPx = (y / 100) * 1920;
+
+          return (
+            <line
+              key={i}
+              x1={xPx}
+              y1={yPx}
+              x2={xPx + Math.sin((angle * Math.PI) / 180) * length}
+              y2={yPx + Math.cos((angle * Math.PI) / 180) * length}
+              stroke={color || "#A0D2DB"}
+              strokeWidth={1.5 + seededRandom(i * 23 + 8) * 1.5}
+              strokeLinecap="round"
+              opacity={intensity * globalFadeIn * (0.3 + seededRandom(i * 29 + 9) * 0.5)}
+            />
+          );
+        })}
+      </svg>
+    </AbsoluteFill>
+  );
+};
+
+// ---------------------------------------------------------------------------
+// NEW: Confetti — multi-colored squares tumbling from top
+// ---------------------------------------------------------------------------
+
+const CONFETTI_COLORS = ["#FF6B6B", "#4ECDC4", "#45B7D1", "#96CEB4", "#FFEAA7", "#DDA0DD", "#FF9FF3", "#54A0FF"];
+
+const Confetti: React.FC<{
+  count: number;
+  color: string;
+  intensity: number;
+}> = ({ count, color, intensity }) => {
+  const frame = useCurrentFrame();
+  const { fps, durationInFrames } = useVideoConfig();
+
+  const globalFadeIn = interpolate(frame, [0, fps * 0.3], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+  const globalFadeOut = interpolate(
+    frame,
+    [durationInFrames - fps * 1, durationInFrames],
+    [1, 0],
+    { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+  );
+
+  return (
+    <AbsoluteFill style={{ pointerEvents: "none", overflow: "hidden" }}>
+      {Array.from({ length: count }, (_, i) => {
+        const baseX = seededRandom(i * 7 + 1) * 110 - 5;
+        const speed = 0.3 + seededRandom(i * 3 + 5) * 0.4;
+        const phase = seededRandom(i * 11 + 3) * Math.PI * 2;
+        const size = 6 + seededRandom(i * 17 + 4) * 8;
+        const delay = seededRandom(i * 19 + 6) * fps * 0.8; // Staggered burst
+        const confettiColor = CONFETTI_COLORS[i % CONFETTI_COLORS.length];
+
+        const elapsed = Math.max(0, frame - delay);
+        const t = (elapsed / fps) * speed;
+
+        // Tumbling fall with horizontal sway
+        const x = baseX + Math.sin(t * 2.5 + phase) * 25;
+        const y = -10 + t * 30;
+        const rotateX = t * 120 + phase * 57.3;
+        const rotateZ = t * 80 + phase * 30;
+
+        const fadeIn = interpolate(
+          frame,
+          [delay, delay + fps * 0.15],
+          [0, 1],
+          { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+        );
+
+        if (y > 110) return null;
+
+        return (
+          <div
+            key={i}
+            style={{
+              position: "absolute",
+              left: `${x}%`,
+              top: `${y}%`,
+              width: size,
+              height: size * 0.6,
+              backgroundColor: confettiColor,
+              opacity: fadeIn * intensity * globalFadeIn * globalFadeOut * 0.85,
+              transform: `rotateX(${rotateX}deg) rotateZ(${rotateZ}deg)`,
+              borderRadius: 1,
+              boxShadow: `0 1px 3px rgba(0,0,0,0.2)`,
+            }}
+          />
+        );
+      })}
+    </AbsoluteFill>
+  );
+};
+
+// ---------------------------------------------------------------------------
 // Main export — dispatches to the right particle renderer
 // ---------------------------------------------------------------------------
 
@@ -343,6 +612,14 @@ export const ParticleOverlay: React.FC<ParticleOverlayProps> = ({
       return <Mist count={count} color={color} intensity={intensity} />;
     case "light-rays":
       return <LightRays count={count} color={color} intensity={intensity} />;
+    case "embers":
+      return <Embers count={count} color={color} intensity={intensity} />;
+    case "snow":
+      return <Snow count={count} color={color} intensity={intensity} />;
+    case "rain":
+      return <Rain count={count} color={color} intensity={intensity} />;
+    case "confetti":
+      return <Confetti count={count} color={color} intensity={intensity} />;
     default:
       return null;
   }

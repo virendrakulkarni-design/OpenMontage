@@ -1,0 +1,90 @@
+{
+  "theme": "flat-motion-graphics",
+  "cuts": [
+    {
+      "id": "v4-hook",
+      "source": "",
+      "type": "hero_title",
+      "in_seconds": 0,
+      "out_seconds": 5.0,
+      "text": "THE 50° DOWNHILL ROLLER",
+      "heroSubtitle": "Perspective 04: The Gravity Turbo Shortcut",
+      "accentColor": "#EA580C",
+      "backgroundColor": "#0F172A"
+    },
+    {
+      "id": "v4-downhill-action",
+      "source": "",
+      "type": "cartoon_race_scene",
+      "in_seconds": 5.0,
+      "out_seconds": 11.5,
+      "scenario": "downhill",
+      "sceneTitle": "THE 60 MPH SHELL BALL",
+      "sceneSubtitle": "The Tortoise tucks in and activates gravity turbo",
+      "harePose": "running",
+      "tortoisePose": "shell_ball",
+      "hareXPercent": 30,
+      "tortoiseXPercent": 80,
+      "hareSpeech": "HEY! YOU'RE NOT RUNNING, YOU'RE A WHEEL!!",
+      "tortoiseSpeech": "TURBO SHELL MODE ENGAGED!",
+      "sfxText": "VROOOOM!",
+      "narratorText": "Tucking in his limbs, the spherical Tortoise rockets downhill at highway speed leaving skid marks.",
+      "accentColor": "#FACC15"
+    },
+    {
+      "id": "v4-downhill-complaint",
+      "source": "",
+      "type": "cartoon_race_scene",
+      "in_seconds": 11.5,
+      "out_seconds": 18.0,
+      "scenario": "downhill",
+      "sceneTitle": "THE CONTROVERSIAL FINISH",
+      "sceneSubtitle": "The Hare demands an immediate rules audit",
+      "harePose": "furious_complaining",
+      "tortoisePose": "smirking_winner",
+      "hareXPercent": 35,
+      "tortoiseXPercent": 88,
+      "hareSpeech": "THAT IS TOTALLY UNFAIR! YOU'RE A VEHICLE!!",
+      "tortoiseSpeech": "Show me where rolling is illegal in the rules!",
+      "sfxText": "UNFAIR!",
+      "showFinishLine": true,
+      "winner": "tortoise",
+      "narratorText": "The Tortoise rolls over the finish line in seconds, leaving the furious Hare screaming at the referees.",
+      "accentColor": "#EF4444"
+    },
+    {
+      "id": "v4-takeaway",
+      "source": "",
+      "type": "callout",
+      "callout_type": "quote",
+      "in_seconds": 18.0,
+      "out_seconds": 23.5,
+      "title": "THE INNOVATION LESSON",
+      "text": "When the slope is in your favor, don't just run with your legs — use your unique anatomy. Working with physics always beats fighting friction.",
+      "borderColor": "#EA580C",
+      "backgroundColor": "#1E293B"
+    }
+  ],
+  "overlays": [
+    {
+      "type": "section_title",
+      "in_seconds": 0.5,
+      "out_seconds": 4.5,
+      "text": "SCENARIO 4",
+      "subtitle": "The Downhill Shell Tumble",
+      "accentColor": "#EA580C",
+      "position": "top-left"
+    },
+    {
+      "type": "stat_reveal",
+      "in_seconds": 6.0,
+      "out_seconds": 11.0,
+      "text": "60 MPH",
+      "subtitle": "Shell Roll Speed",
+      "accentColor": "#FACC15",
+      "position": "bottom-right"
+    }
+  ],
+  "captions": [],
+  "audio": {}
+}

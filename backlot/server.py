@@ -165,6 +165,39 @@ async def _lifespan(app: FastAPI):
 def create_app() -> FastAPI:
     app = FastAPI(title="Backlot", docs_url=None, redoc_url=None, lifespan=_lifespan)
 
+    # ---- Custom Character Upload & Registry ----------------------------
+
+    @app.get("/api/characters")
+    async def get_characters() -> dict:
+        from lib.character_image_manager import list_registered_characters
+        return {"characters": list_registered_characters()}
+
+    @app.post("/api/characters/upload")
+    async def upload_character(request: Request) -> dict:
+        form = await request.form()
+        file = form.get("file")
+        if not file or not hasattr(file, "filename"):
+            raise HTTPException(status_code=400, detail="No file uploaded")
+        name = form.get("name", "")
+        role = form.get("role", "character")
+        desc = form.get("description", "")
+        cid = form.get("id")
+
+        temp_dir = REPO_ROOT / ".backlot" / "uploads"
+        temp_dir.mkdir(parents=True, exist_ok=True)
+        temp_path = temp_dir / file.filename
+        temp_path.write_bytes(await file.read())
+
+        from lib.character_image_manager import register_character
+        manifest = register_character(
+            image_path=temp_path,
+            character_id=str(cid) if cid else None,
+            display_name=str(name) if name else None,
+            role=str(role),
+            description=str(desc),
+        )
+        return {"status": "ok", "character": manifest}
+
     # ---- API ----------------------------------------------------------
 
     @app.get("/api/health")

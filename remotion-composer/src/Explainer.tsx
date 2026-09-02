@@ -30,6 +30,20 @@ import type { TerminalStep } from "./components/TerminalScene";
 import { ScreenshotScene } from "./components/ScreenshotScene";
 import type { ScreenshotStep } from "./components/ScreenshotScene";
 import { ProviderChip } from "./components/ProviderChip";
+import {
+  CartoonRaceScene,
+  type CartoonRaceSceneProps,
+  type HarePose,
+  type TortoisePose,
+  type RaceScenario,
+} from "./components/CartoonRaceScene";
+import {
+  DynamicStoryScene,
+  type DynamicStorySceneProps,
+  type StageActor,
+} from "./components/DynamicStoryScene";
+import type { PerspectiveStageCanvasProps } from "./components/PerspectiveStageCanvas";
+import { SceneTransition, type TransitionType } from "./components/SceneTransition";
 import { resolveAsset } from "./lib/resolveAsset";
 import type { ParticleType } from "./components/ParticleOverlay";
 import { resolveTheme, type ThemeConfig, DEFAULT_THEME } from "./Root";
@@ -243,8 +257,8 @@ interface Cut {
   fontSize?: number;
   // Animation & transitions
   animation?: string;
-  transition_in?: string;
-  transition_out?: string;
+  transition_in?: TransitionType;
+  transition_out?: TransitionType;
   transition_duration?: number;
   transform?: {
     animation?: string;
@@ -268,6 +282,24 @@ interface Cut {
   screenshotSteps?: ScreenshotStep[];
   screenshotSize?: { width: number; height: number };
   cursorStartAt?: [number, number];
+  // Dynamic story scene props (type: "dynamic_story_scene" or legacy "cartoon_race_scene")
+  actors?: StageActor[];
+  environment?: PerspectiveStageCanvasProps;
+  scenario?: string;
+  sceneTitle?: string;
+  sceneSubtitle?: string;
+  harePose?: HarePose;
+  tortoisePose?: TortoisePose;
+  hareXPercent?: number;
+  tortoiseXPercent?: number;
+  hareSpeech?: string;
+  tortoiseSpeech?: string;
+  hareImage?: string;
+  tortoiseImage?: string;
+  sfxText?: string;
+  narratorText?: string;
+  showFinishLine?: boolean;
+  winner?: "hare" | "tortoise" | "none" | string;
 }
 
 interface Overlay {
@@ -655,6 +687,32 @@ const SceneRenderer: React.FC<{ cut: Cut; theme: ThemeConfig }> = ({ cut, theme 
     );
   }
 
+  // --- Dynamic story scene (universal multi-character theatrical stage) ---
+  if (cut.type === "dynamic_story_scene" || cut.type === "cartoon_race_scene") {
+    return (
+      <DynamicStoryScene
+        sceneTitle={cut.sceneTitle || cut.title || "Scene"}
+        sceneSubtitle={cut.sceneSubtitle || cut.subtitle}
+        actors={cut.actors}
+        environment={cut.environment}
+        scenario={cut.scenario}
+        harePose={cut.harePose}
+        tortoisePose={cut.tortoisePose}
+        hareXPercent={cut.hareXPercent}
+        tortoiseXPercent={cut.tortoiseXPercent}
+        hareSpeech={cut.hareSpeech}
+        tortoiseSpeech={cut.tortoiseSpeech}
+        hareImage={cut.hareImage}
+        tortoiseImage={cut.tortoiseImage}
+        sfxText={cut.sfxText}
+        narratorText={cut.narratorText || cut.text}
+        accentColor={accent}
+        showFinishLine={cut.showFinishLine}
+        winner={cut.winner}
+      />
+    );
+  }
+
   // --- Chart types — use theme.chartColors as default palette ---
   if (cut.type === "bar_chart" && cut.chartData) {
     return maybeWrapWithBg(
@@ -846,14 +904,32 @@ export const Explainer: React.FC<ExplainerProps> = (props) => {
       {/* Layer 0: Animated gradient background — driven by theme */}
       <AnimatedBackground theme={theme} />
 
-      {/* Layer 1: Visual scenes */}
-      {cuts.map((cut) => {
+      {/* Layer 1: Visual scenes with transitions */}
+      {cuts.map((cut, cutIndex) => {
         const from = Math.round(cut.in_seconds * fps);
         const duration = Math.round((cut.out_seconds - cut.in_seconds) * fps);
 
+        // Smart default transitions per scene type
+        const defaultTransIn: TransitionType = 
+          cut.type === "hero_title" ? "flash" :
+          cut.type === "cartoon_race_scene" ? "crossfade" :
+          cut.type === "callout" ? "zoom-wipe" :
+          cutIndex === 0 ? "crossfade" : "crossfade";
+        const defaultTransOut: TransitionType =
+          cut.type === "hero_title" ? "zoom-wipe" :
+          cut.type === "cartoon_race_scene" ? "crossfade" :
+          cut.type === "callout" ? "crossfade" :
+          "crossfade";
+
         return (
           <Sequence key={cut.id} from={from} durationInFrames={duration}>
-            <SceneRenderer cut={cut} theme={theme} />
+            <SceneTransition
+              transitionIn={cut.transition_in || defaultTransIn}
+              transitionOut={cut.transition_out || defaultTransOut}
+              transitionDuration={cut.transition_duration || 10}
+            >
+              <SceneRenderer cut={cut} theme={theme} />
+            </SceneTransition>
           </Sequence>
         );
       })}

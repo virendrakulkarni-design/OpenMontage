@@ -1,3 +1,4 @@
+import React from "react";
 import {
   AbsoluteFill,
   Sequence,
@@ -29,6 +30,8 @@ type CaptionOverlayProps = {
   // Separator rendered between words. Space-delimited languages want the
   // default " "; CJK languages (no inter-word spacing) should pass "".
   wordSeparator?: string;
+  // Visual style preset
+  style?: "default" | "cinematic" | "karaoke" | "minimal";
 };
 
 interface CaptionPage {
@@ -57,7 +60,11 @@ function buildPages(words: WordCaption[], wordsPerPage: number): CaptionPage[] {
   return pages;
 }
 
-const PageRenderer: React.FC<{
+// ---------------------------------------------------------------------------
+// Cinematic Page Renderer — scale-pop, neon glow, underline wipe
+// ---------------------------------------------------------------------------
+
+const CinematicPageRenderer: React.FC<{
   page: CaptionPage;
   fontSize: number;
   color: string;
@@ -71,7 +78,179 @@ const PageRenderer: React.FC<{
 
   const currentMs = page.startMs + (frame / fps) * 1000;
 
-  // Spring entrance
+  // Spring entrance for the entire page container
+  const entrance = spring({
+    frame,
+    fps,
+    config: { damping: 14, stiffness: 100 },
+  });
+
+  // Frosted glass backdrop entrance
+  const backdropScale = interpolate(entrance, [0, 1], [0.85, 1]);
+  const backdropOpacity = interpolate(entrance, [0, 1], [0, 1]);
+
+  return (
+    <AbsoluteFill
+      style={{
+        justifyContent: "flex-end",
+        alignItems: "center",
+        paddingBottom: 70,
+      }}
+    >
+      {/* Frosted glass backdrop with animated gradient border */}
+      <div
+        style={{
+          opacity: backdropOpacity,
+          transform: `translateY(${interpolate(entrance, [0, 1], [30, 0])}px) scale(${backdropScale})`,
+          background: backgroundColor,
+          backdropFilter: "blur(16px)",
+          WebkitBackdropFilter: "blur(16px)",
+          borderRadius: 18,
+          padding: "18px 34px",
+          maxWidth: "88%",
+          textAlign: "center",
+          boxShadow: `0 8px 32px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08)`,
+          border: `1.5px solid rgba(255, 255, 255, 0.1)`,
+          position: "relative",
+          overflow: "hidden",
+        }}
+      >
+        {/* Animated gradient shimmer along top edge */}
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            height: 2,
+            background: `linear-gradient(90deg, transparent 0%, ${highlightColor}88 ${
+              interpolate(frame % (fps * 3), [0, fps * 3], [0, 100])
+            }%, transparent 100%)`,
+            opacity: 0.8,
+          }}
+        />
+
+        <span
+          style={{
+            fontSize,
+            fontWeight: 800,
+            fontFamily,
+            lineHeight: 1.5,
+            whiteSpace: "pre-wrap",
+            letterSpacing: "-0.01em",
+          }}
+        >
+          {page.words.map((w, i) => {
+            const isActive = w.startMs <= currentMs && w.endMs > currentMs;
+            const isPast = w.endMs <= currentMs;
+            const isFuture = w.startMs > currentMs;
+
+            // Per-word staggered entrance spring
+            const wordEntrance = spring({
+              frame: frame - Math.round(i * 2),
+              fps,
+              config: { damping: 16, stiffness: 130 },
+            });
+
+            // Active word scale-pop spring
+            const activePop = isActive
+              ? spring({
+                  frame: Math.round((currentMs - w.startMs) / (1000 / fps)),
+                  fps,
+                  config: { damping: 10, stiffness: 200, mass: 0.6 },
+                })
+              : 0;
+
+            const wordScale = isActive ? interpolate(activePop, [0, 1], [1.0, 1.12]) : 1;
+
+            // Underline wipe progress for active word
+            const underlineWidth = isActive
+              ? interpolate(
+                  currentMs,
+                  [w.startMs, w.endMs],
+                  [0, 100],
+                  { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+                )
+              : isPast
+              ? 100
+              : 0;
+
+            // Color states
+            const wordColor = isActive
+              ? highlightColor
+              : isPast
+              ? color
+              : `${color}66`;
+
+            // Neon glow for active word
+            const glowShadow = isActive
+              ? `0 0 8px ${highlightColor}99, 0 0 20px ${highlightColor}44, 0 0 40px ${highlightColor}22, 0 2px 4px rgba(0,0,0,0.6)`
+              : isPast
+              ? "0 2px 4px rgba(0,0,0,0.4)"
+              : "0 2px 4px rgba(0,0,0,0.3)";
+
+            return (
+              <span
+                key={`${w.startMs}-${i}`}
+                style={{
+                  display: "inline-block",
+                  whiteSpace: "nowrap",
+                  color: wordColor,
+                  textShadow: glowShadow,
+                  transform: `scale(${wordScale}) translateY(${interpolate(wordEntrance, [0, 1], [12, 0])}px)`,
+                  opacity: interpolate(wordEntrance, [0, 1], [0, 1]),
+                  position: "relative",
+                  WebkitTextStroke: isActive ? `0.5px ${highlightColor}` : "none",
+                  marginBottom: 4,
+                }}
+              >
+                {w.word}
+                {i < page.words.length - 1 ? wordSeparator : ""}
+
+                {/* Animated underline wipe */}
+                {(isActive || isPast) && (
+                  <span
+                    style={{
+                      position: "absolute",
+                      bottom: -2,
+                      left: 0,
+                      width: `${underlineWidth}%`,
+                      height: 3,
+                      background: isActive
+                        ? `linear-gradient(90deg, ${highlightColor}, ${highlightColor}88)`
+                        : `${color}33`,
+                      borderRadius: 2,
+                      boxShadow: isActive ? `0 0 8px ${highlightColor}66` : "none",
+                    }}
+                  />
+                )}
+              </span>
+            );
+          })}
+        </span>
+      </div>
+    </AbsoluteFill>
+  );
+};
+
+// ---------------------------------------------------------------------------
+// Classic Page Renderer (preserved for backward compatibility)
+// ---------------------------------------------------------------------------
+
+const ClassicPageRenderer: React.FC<{
+  page: CaptionPage;
+  fontSize: number;
+  color: string;
+  highlightColor: string;
+  backgroundColor: string;
+  fontFamily: string;
+  wordSeparator: string;
+}> = ({ page, fontSize, color, highlightColor, backgroundColor, fontFamily, wordSeparator }) => {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+
+  const currentMs = page.startMs + (frame / fps) * 1000;
+
   const entrance = spring({
     frame,
     fps,
@@ -113,13 +292,9 @@ const PageRenderer: React.FC<{
               <span
                 key={`${w.startMs}-${i}`}
                 style={{
-                  // Keep each word unbroken so lines wrap only at word
-                  // boundaries. For space-delimited text this matches the
-                  // previous behavior; for CJK it prevents mid-word breaks.
                   display: "inline-block",
                   whiteSpace: "nowrap",
                   color: isActive ? highlightColor : isPast ? color : `${color}99`,
-                  transition: "none", // CSS transitions forbidden in Remotion
                   textShadow: isActive
                     ? `0 0 20px ${highlightColor}66, 0 2px 4px rgba(0,0,0,0.5)`
                     : "0 2px 4px rgba(0,0,0,0.5)",
@@ -135,6 +310,10 @@ const PageRenderer: React.FC<{
   );
 };
 
+// ---------------------------------------------------------------------------
+// Main Export
+// ---------------------------------------------------------------------------
+
 export const CaptionOverlay: React.FC<CaptionOverlayProps> = ({
   words,
   wordsPerPage = 6,
@@ -144,9 +323,14 @@ export const CaptionOverlay: React.FC<CaptionOverlayProps> = ({
   backgroundColor = "rgba(15, 23, 42, 0.75)",
   fontFamily = "Space Grotesk, Inter, system-ui, sans-serif",
   wordSeparator = " ",
+  style = "cinematic",
 }) => {
   const { fps } = useVideoConfig();
   const pages = buildPages(words, wordsPerPage);
+
+  const PageComponent = style === "cinematic" || style === "karaoke"
+    ? CinematicPageRenderer
+    : ClassicPageRenderer;
 
   return (
     <AbsoluteFill>
@@ -160,7 +344,7 @@ export const CaptionOverlay: React.FC<CaptionOverlayProps> = ({
 
         return (
           <Sequence key={i} from={fromFrame} durationInFrames={duration}>
-            <PageRenderer
+            <PageComponent
               page={page}
               fontSize={fontSize}
               color={color}

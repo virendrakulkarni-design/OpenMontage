@@ -1,0 +1,85 @@
+{
+  "theme": "flat-motion-graphics",
+  "cuts": [
+    {
+      "id": "custom-hook",
+      "source": "",
+      "type": "hero_title",
+      "in_seconds": 0,
+      "out_seconds": 4.5,
+      "text": "CUSTOM CHARACTER SHOWCASE",
+      "heroSubtitle": "Featuring Uploaded Character in 'Sprint' Mode",
+      "accentColor": "#F97316",
+      "backgroundColor": "#0F172A"
+    },
+    {
+      "id": "custom-action-1",
+      "source": "",
+      "type": "cartoon_race_scene",
+      "in_seconds": 4.5,
+      "out_seconds": 11.0,
+      "scenario": "sprint",
+      "sceneTitle": "SPRINT CHALLENGE",
+      "sceneSubtitle": "Testing custom character physics and consistency",
+      "harePose": "running",
+      "tortoisePose": "walking",
+      "hareXPercent": 70,
+      "tortoiseXPercent": 25,
+      "hareSpeech": "Watch my custom agility in action!",
+      "tortoiseSpeech": "Steady cadence never fails.",
+      "hareImage": "characters/speedy-fox/avatar.svg",
+      "tortoiseImage": null,
+      "sfxText": "ZOOM!",
+      "narratorText": "The uploaded character maintains 100% texture consistency across all motion beats.",
+      "accentColor": "#F97316"
+    },
+    {
+      "id": "custom-finish",
+      "source": "",
+      "type": "cartoon_race_scene",
+      "in_seconds": 11.0,
+      "out_seconds": 17.5,
+      "scenario": "sprint",
+      "sceneTitle": "CLIMAX & CONSISTENCY CHECK",
+      "sceneSubtitle": "Deterministic rendering with spring dynamics",
+      "harePose": "celebrating",
+      "tortoisePose": "smirking_winner",
+      "hareXPercent": 88,
+      "tortoiseXPercent": 35,
+      "hareSpeech": "100% consistent across every frame!",
+      "tortoiseSpeech": "Physics and artwork fully synchronized.",
+      "hareImage": "characters/speedy-fox/avatar.svg",
+      "tortoiseImage": null,
+      "sfxText": "MATCH!",
+      "showFinishLine": true,
+      "winner": "hare",
+      "narratorText": "Every scene preserves original art details while driving responsive cartoon animation.",
+      "accentColor": "#22D3EE"
+    },
+    {
+      "id": "custom-takeaway",
+      "source": "",
+      "type": "callout",
+      "callout_type": "quote",
+      "in_seconds": 17.5,
+      "out_seconds": 22.5,
+      "title": "CHARACTER CONSISTENCY VERIFIED",
+      "text": "User-uploaded characters are deterministically rigged with responsive physics, squash & stretch, and scene-aware expressions without distorting original artwork.",
+      "borderColor": "#F97316",
+      "backgroundColor": "#1E293B"
+    }
+  ],
+  "overlays": [
+    {
+      "type": "section_title",
+      "in_seconds": 0.5,
+      "out_seconds": 4.0,
+      "text": "CUSTOM CHARACTER RIG",
+      "subtitle": "Accurate Visual Identity Engine",
+      "accentColor": "#F97316",
+      "position": "top-left"
+    }
+  ],
+  "captions": [],
+  "audio": {}
+}

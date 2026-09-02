@@ -1,0 +1,145 @@
+{
+  "theme": "flat-motion-graphics",
+  "cuts": [
+    {
+      "id": "hook-untold-story",
+      "source": "",
+      "type": "hero_title",
+      "in_seconds": 0,
+      "out_seconds": 4.5,
+      "text": "THE FABLE YOU WERE NEVER TOLD",
+      "heroSubtitle": "Everyone knows who won. Nobody talks about why.",
+      "accentColor": "#22D3EE",
+      "backgroundColor": "#0F172A"
+    },
+    {
+      "id": "perspective-the-hare",
+      "source": "",
+      "type": "comparison",
+      "in_seconds": 4.5,
+      "out_seconds": 11.0,
+      "title": "01 / THE HARE: THE PRODIGY TRAP",
+      "leftLabel": "RAW SPEED",
+      "leftValue": "45 MPH",
+      "leftColor": "#F43F5E",
+      "rightLabel": "DISCIPLINE",
+      "rightValue": "0%",
+      "rightColor": "#94A3B8",
+      "changeIndicator": "EGO OVERLOAD",
+      "changeDirection": "down",
+      "cardBackgroundColor": "#1E293B",
+      "backgroundColor": "#0F172A"
+    },
+    {
+      "id": "perspective-the-tortoise",
+      "source": "",
+      "type": "progress_bar",
+      "in_seconds": 11.0,
+      "out_seconds": 17.5,
+      "title": "02 / THE TORTOISE: UNSTOPPABLE CADENCE",
+      "progress": 100,
+      "progressLabel": "STEADY COMPOUNDING (0.17 MPH)",
+      "progressColor": "#10B981",
+      "progressAnimation": "fill",
+      "backgroundColor": "#0F172A"
+    },
+    {
+      "id": "perspective-spectators",
+      "source": "",
+      "type": "pie_chart",
+      "in_seconds": 17.5,
+      "out_seconds": 24.5,
+      "title": "03 / THE SPECTATORS: PREDICTION BIAS",
+      "donut": true,
+      "centerLabel": "Actual Result",
+      "centerValue": "1%",
+      "chartData": [
+        { "label": "Expected Hare Blowout", "value": 99, "color": "#F43F5E" },
+        { "label": "Understood Compounding", "value": 1, "color": "#22D3EE" }
+      ],
+      "showLegend": true,
+      "backgroundColor": "#0F172A"
+    },
+    {
+      "id": "perspective-finish-line",
+      "source": "",
+      "type": "callout",
+      "callout_type": "quote",
+      "in_seconds": 24.5,
+      "out_seconds": 29.5,
+      "title": "04 / THE COLD TRUTH",
+      "text": "The Hare didn't lose to the Tortoise. He lost to his own ego. The Tortoise wasn't competing with anyone else.",
+      "borderColor": "#8B5CF6",
+      "backgroundColor": "#1E293B"
+    },
+    {
+      "id": "outro-takeaway",
+      "source": "",
+      "type": "hero_title",
+      "in_seconds": 29.5,
+      "out_seconds": 34.0,
+      "text": "WHICH RACE ARE YOU RUNNING?",
+      "heroSubtitle": "The sprint for applause, or the walk to mastery?",
+      "accentColor": "#22D3EE",
+      "backgroundColor": "#0F172A"
+    }
+  ],
+  "overlays": [
+    {
+      "type": "section_title",
+      "in_seconds": 0.5,
+      "out_seconds": 4.2,
+      "text": "THE RACE",
+      "subtitle": "A Multi-Perspective Deconstruction",
+      "accentColor": "#22D3EE",
+      "position": "top-left"
+    },
+    {
+      "type": "stat_reveal",
+      "in_seconds": 5.0,
+      "out_seconds": 10.5,
+      "text": "THE HARE",
+      "subtitle": "When winning is too easy, boredom is fatal.",
+      "accentColor": "#F43F5E",
+      "position": "bottom-left"
+    },
+    {
+      "type": "stat_reveal",
+      "in_seconds": 11.5,
+      "out_seconds": 17.0,
+      "text": "THE TORTOISE",
+      "subtitle": "I didn't run against him. I ran my own cadence.",
+      "accentColor": "#10B981",
+      "position": "bottom-right"
+    },
+    {
+      "type": "section_title",
+      "in_seconds": 18.0,
+      "out_seconds": 24.0,
+      "text": "THE CROWD",
+      "subtitle": "People cheer for flash, but consistency takes the prize.",
+      "accentColor": "#F59E0B",
+      "position": "top-left"
+    },
+    {
+      "type": "stat_reveal",
+      "in_seconds": 25.0,
+      "out_seconds": 29.0,
+      "text": "TRUTH",
+      "subtitle": "Mastery is internal.",
+      "accentColor": "#8B5CF6",
+      "position": "top-right"
+    },
+    {
+      "type": "section_title",
+      "in_seconds": 30.0,
+      "out_seconds": 33.5,
+      "text": "CHOOSE YOUR PACE",
+      "subtitle": "Consistency always wins.",
+      "accentColor": "#22D3EE",
+      "position": "top-left"
+    }
+  ],
+  "captions": [],
+  "audio": {}
+}

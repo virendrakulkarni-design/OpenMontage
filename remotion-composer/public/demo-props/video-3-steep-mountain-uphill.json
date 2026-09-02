@@ -1,0 +1,90 @@
+{
+  "theme": "flat-motion-graphics",
+  "cuts": [
+    {
+      "id": "v3-hook",
+      "source": "",
+      "type": "hero_title",
+      "in_seconds": 0,
+      "out_seconds": 5.0,
+      "text": "THE 40° MOUNTAIN INCLINE",
+      "heroSubtitle": "Perspective 03: The Brutal Endurance Test",
+      "accentColor": "#A855F7",
+      "backgroundColor": "#0F172A"
+    },
+    {
+      "id": "v3-uphill-action",
+      "source": "",
+      "type": "cartoon_race_scene",
+      "in_seconds": 5.0,
+      "out_seconds": 11.5,
+      "scenario": "uphill",
+      "sceneTitle": "HALFWAY UP THE MOUNTAIN",
+      "sceneSubtitle": "Sprint power redlines at high altitude",
+      "harePose": "panting",
+      "tortoisePose": "hiking",
+      "hareXPercent": 35,
+      "tortoiseXPercent": 65,
+      "hareSpeech": "LEGS... MADE OF JELLY... NO AIR...",
+      "tortoiseSpeech": "One step at a time, buddy.",
+      "sfxText": "GASP!",
+      "narratorText": "The Hare sprinted the base and burned out his stamina in 30 seconds, while the Tortoise's low center of gravity keeps him marching.",
+      "accentColor": "#EF4444"
+    },
+    {
+      "id": "v3-uphill-summit",
+      "source": "",
+      "type": "cartoon_race_scene",
+      "in_seconds": 11.5,
+      "out_seconds": 18.0,
+      "scenario": "uphill",
+      "sceneTitle": "THE MOUNTAIN SUMMIT",
+      "sceneSubtitle": "Pacing and stamina conquer the peak",
+      "harePose": "panting",
+      "tortoisePose": "smirking_winner",
+      "hareXPercent": 25,
+      "tortoiseXPercent": 85,
+      "hareSpeech": "SOMEONE CALL A RESCUE COPTER...",
+      "tortoiseSpeech": "View from the top is great!",
+      "sfxText": "SUMMIT!",
+      "showFinishLine": true,
+      "winner": "tortoise",
+      "narratorText": "The Tortoise plants his flag on the peak while the collapsed Hare gasps for breath below.",
+      "accentColor": "#10B981"
+    },
+    {
+      "id": "v3-takeaway",
+      "source": "",
+      "type": "callout",
+      "callout_type": "warning",
+      "in_seconds": 18.0,
+      "out_seconds": 23.5,
+      "title": "THE ENDURANCE LESSON",
+      "text": "Sprinting an uphill slope is guaranteed burnout. When the gradient gets steep, energy management and sustained cadence beat raw acceleration.",
+      "borderColor": "#A855F7",
+      "backgroundColor": "#1E293B"
+    }
+  ],
+  "overlays": [
+    {
+      "type": "section_title",
+      "in_seconds": 0.5,
+      "out_seconds": 4.5,
+      "text": "SCENARIO 3",
+      "subtitle": "The Steep Mountain Climb",
+      "accentColor": "#A855F7",
+      "position": "top-left"
+    },
+    {
+      "type": "stat_reveal",
+      "in_seconds": 6.0,
+      "out_seconds": 11.0,
+      "text": "ALTITUDE",
+      "subtitle": "Stamina > Speed",
+      "accentColor": "#EF4444",
+      "position": "bottom-left"
+    }
+  ],
+  "captions": [],
+  "audio": {}
+}
