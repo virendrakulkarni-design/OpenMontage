@@ -94,7 +94,7 @@ const CinematicPageRenderer: React.FC<{
       style={{
         justifyContent: "flex-end",
         alignItems: "center",
-        paddingBottom: 70,
+        paddingBottom: 220,
       }}
     >
       {/* Frosted glass backdrop with animated gradient border */}
@@ -262,7 +262,7 @@ const ClassicPageRenderer: React.FC<{
       style={{
         justifyContent: "flex-end",
         alignItems: "center",
-        paddingBottom: 80,
+        paddingBottom: 220,
       }}
     >
       <div

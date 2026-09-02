@@ -119,6 +119,9 @@ export const DynamicStoryScene: React.FC<DynamicStorySceneProps> = ({
       if (scenario === "sprint") {
         hareBottom = harePose === "celebrating" ? 22 : 25;
         hareScale = 1.45;
+      } else if (scenario === "river") {
+        hareBottom = 16;
+        hareScale = 1.25;
       } else if (scenario === "uphill") {
         hareBottom = 22;
         hareScale = 1.35;
@@ -148,6 +151,9 @@ export const DynamicStoryScene: React.FC<DynamicStorySceneProps> = ({
       if (scenario === "sprint") {
         tortBottom = 32;
         tortScale = 1.15;
+      } else if (scenario === "river") {
+        tortBottom = 15;
+        tortScale = 1.2;
       } else if (scenario === "uphill") {
         tortBottom = 48;
         tortScale = 1.05;
@@ -287,24 +293,28 @@ export const DynamicStoryScene: React.FC<DynamicStorySceneProps> = ({
               />
             )}
 
-            {/* Comic Speech Bubble */}
+            {/* Comic Speech Bubble with Responsive Clamping */}
             {actor.speech && (
               <div
                 style={{
                   position: "absolute",
                   bottom: "105%",
                   left: "50%",
-                  transform: `translateX(-50%) scale(${speechSpring})`,
+                  transform: `translateX(${xPos > 60 ? "-78%" : xPos < 40 ? "-22%" : "-50%"}) scale(${speechSpring})`,
                   backgroundColor: "#FFFFFF",
                   color: "#0F172A",
-                  padding: "14px 24px",
-                  borderRadius: 16,
+                  padding: "12px 22px",
+                  borderRadius: 18,
                   fontSize: 22,
                   fontWeight: 800,
-                  whiteSpace: "nowrap",
-                  boxShadow: "0 10px 25px rgba(0,0,0,0.35)",
+                  maxWidth: 380,
+                  width: "max-content",
+                  whiteSpace: "normal",
+                  textAlign: "center",
+                  lineHeight: 1.35,
+                  boxShadow: "0 10px 25px rgba(0,0,0,0.4)",
                   border: `3px solid ${actor.speechBorderColor || "#22D3EE"}`,
-                  zIndex: 35,
+                  zIndex: 45,
                 }}
               >
                 {actor.name ? `${actor.name}: ` : ""}
@@ -312,7 +322,7 @@ export const DynamicStoryScene: React.FC<DynamicStorySceneProps> = ({
               </div>
             )}
 
-            {/* Character Visual Rig */}
+            {/* Character Visual Rig with River Physics */}
             <DynamicCharacterRig
               imageSrc={actor.imageSrc}
               archetype={actor.archetype}
@@ -320,29 +330,30 @@ export const DynamicStoryScene: React.FC<DynamicStorySceneProps> = ({
               scale={actorScale}
               flip={actor.flip}
               styling={actor.styling}
+              isSubmergedInWater={scenario === "river"}
             />
           </div>
         );
       })}
 
-      {/* 5. Bottom Narrator Takeaway Card */}
+      {/* 5. Bottom Narrator Takeaway Card (Docked cleanly) */}
       {narratorText && (
         <div
           style={{
             position: "absolute",
-            bottom: 80,
-            left: 40,
-            right: 40,
-            backgroundColor: "rgba(15, 23, 42, 0.95)",
-            border: "2px solid rgba(255, 255, 255, 0.2)",
-            padding: "20px 32px",
-            borderRadius: 20,
+            bottom: 45,
+            left: 35,
+            right: 35,
+            backgroundColor: "rgba(15, 23, 42, 0.96)",
+            border: "2px solid rgba(255, 255, 255, 0.25)",
+            padding: "16px 28px",
+            borderRadius: 18,
             color: "#F8FAFC",
-            fontSize: 26,
+            fontSize: 24,
             fontWeight: 600,
             textAlign: "center",
-            lineHeight: 1.4,
-            boxShadow: "0 12px 35px rgba(0,0,0,0.7)",
+            lineHeight: 1.38,
+            boxShadow: "0 12px 35px rgba(0,0,0,0.75)",
             zIndex: 40,
           }}
         >

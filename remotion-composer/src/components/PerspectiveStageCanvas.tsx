@@ -496,9 +496,9 @@ export const PerspectiveStageCanvas: React.FC<PerspectiveStageCanvasProps> = ({
         <div
           style={{
             position: "absolute",
-            top: "42%",
+            top: "43%",
             left: "50%",
-            transform: "translate(-50%, -50%)",
+            transform: "translate(-50%, -50%) perspective(900px) rotateX(12deg)",
             width: 880,
             height: 380,
             zIndex: 12,
