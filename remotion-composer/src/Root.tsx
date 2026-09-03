@@ -103,6 +103,22 @@ export const THEMES: Record<string, ThemeConfig> = {
     captionHighlightColor: "#FFB347",
     captionBackgroundColor: "rgba(10, 10, 26, 0.8)",
   },
+  "cinematic-3d": {
+    primaryColor: "#0F172A",
+    accentColor: "#F59E0B",
+    backgroundColor: "#020617",
+    surfaceColor: "rgba(15, 23, 42, 0.92)",
+    textColor: "#F8FAFC",
+    mutedTextColor: "#94A3B8",
+    headingFont: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+    bodyFont: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+    monoFont: "monospace",
+    chartColors: ["#F59E0B", "#38BDF8", "#10B981", "#EF4444", "#8B5CF6"],
+    springConfig: { damping: 15, stiffness: 100, mass: 0.9 },
+    transitionDuration: 0.4,
+    captionHighlightColor: "#FACC15",
+    captionBackgroundColor: "rgba(0, 0, 0, 0.75)",
+  },
 };
 
 // Default theme when none is specified — uses the existing dark style for backwards compatibility

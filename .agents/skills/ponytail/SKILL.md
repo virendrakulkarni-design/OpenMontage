@@ -37,4 +37,5 @@ The ladder is a reflex, not a research project — but it runs *after* you under
 - **No boilerplate**: No scaffolding "for later", later can scaffold for itself.
 - **Deletion over addition**: Boring over clever; clever is what someone has to decode at 3am.
 - **Fewest files possible**: Shortest working diff wins.
+- **Absolute necessity**: Every line of code, imported package, and configuration field must be strictly necessary, actively invoked, and directly affect runtime application behavior. Zero unused imports, zero phantom dependencies, zero remote network calls during rendering paths.
 - **Never cut safety**: Trust-boundary validation, error handling, security, and accessibility are never on the chopping block.
