@@ -60,6 +60,12 @@ def main():
             str(props_path),
             "--codec",
             "h264",
+            "--concurrency",
+            "4",
+            "--gl",
+            "angle",
+            "--timeout",
+            "60000",
         ]
 
         start = time.time()

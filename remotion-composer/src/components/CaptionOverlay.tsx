@@ -202,6 +202,7 @@ const CinematicPageRenderer: React.FC<{
                   position: "relative",
                   WebkitTextStroke: isActive ? `0.5px ${highlightColor}` : "none",
                   marginBottom: 4,
+                  marginRight: i < page.words.length - 1 ? 10 : 0,
                 }}
               >
                 {w.word}

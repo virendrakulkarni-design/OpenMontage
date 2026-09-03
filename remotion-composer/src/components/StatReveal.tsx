@@ -12,7 +12,7 @@ interface StatRevealProps {
   accentColor?: string;
   /** Label color. Defaults to near-white; pass the theme's textColor on light themes. */
   textColor?: string;
-  position?: "center" | "bottom-right" | "right";
+  position?: "center" | "bottom-right" | "right" | "top-right";
 }
 
 export const StatReveal: React.FC<StatRevealProps> = ({
@@ -52,6 +52,8 @@ export const StatReveal: React.FC<StatRevealProps> = ({
   const positionStyles: React.CSSProperties =
     position === "center"
       ? { justifyContent: "center", alignItems: "center" }
+      : position === "top-right"
+      ? { justifyContent: "flex-start", alignItems: "flex-end", paddingTop: 180, paddingRight: 60 }
       : position === "right"
       ? { justifyContent: "center", alignItems: "flex-end", paddingRight: 80 }
       : { justifyContent: "flex-end", alignItems: "flex-end", padding: 80 };
